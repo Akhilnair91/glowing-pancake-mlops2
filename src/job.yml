@@ -1,15 +1,24 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
-code: model
+
+code: model  # Path to the model training code directory
+
 command: >-
-  python 
-  --
-  --
+  python train.py
+  --training_data ${{inputs.training_data}}
+  --reg_rate ${{inputs.reg_rate}}
+
 inputs:
   training_data: 
     type: uri_folder 
-    path: 
-  reg_rate: 0.01
+    path: azureml:diabetes-dev-folder@latest  # Use the registered data asset
+  reg_rate: 
+    type: number
+    default: 0.01  # Regularization rate
+
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-compute: 
-experiment_name: 
-description: 
+
+compute: azureml:AzureCertification-Dev
+
+experiment_name: diabetes-experiment
+
+description: Training a diabetes classification model using sklearn.
